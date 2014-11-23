@@ -1,7 +1,18 @@
+#include <iostream>
+#include <fstream>
 
-void menu()
-{
-    cout << "Menu" << endl;
+using namespace std;
+
+#include "Material.h"
+#include "Libro.h"
+#include "Disco.h"
+#include "Software.h"
+#include "Fecha.h"
+#include "Reserva.h"
+
+
+void menu(){
+    cout << "\nMenu" << endl;
     cout << "a. Consultar la lista de Materiales" << endl;
     cout << "b. Consultar la lista de Reservaciones" << endl;
     cout << "c. Consultar las reservaciones de un material dado" << endl;
@@ -13,92 +24,100 @@ void menu()
 
 int main()
 {
-    Reserva Reservaciones[50];
-    Material *M[20];
-    int cont = 0, id, iaux; //necesarios pra ingresar los datos de Material
-    string titulo, saux;    //necesarios pra ingresar los datos de Material
-    char opcion='g', clave; //necesarios pra ingresar los datos de Material
-    
-    //Carga Reserva
-        ifstream ArchivoReserva;
-        ArchivoReserva.open("Reserva_Win.txt");
-        
-    //Carga Material
-        ifstream ArchivoMaterial;
-        ArchivoMaterial.open("Material.txt");
-    
-    //Crea el areglo de apuntadores a objetos de tipo material e hijos
-        while (!ArchivoMaterial.eof()){
-        ArchivoMaterial>>id>>titulo>>clave;
 
+    Reserva Reservaciones[50];
+    Material *Material[20];
+    int cont = 0, id, iaux; //necesarios pra ingresar los datos de Material
+    string titulo, saux; //necesarios pra ingresar los datos de Material
+    char opcion='g', clave; //necesarios pra ingresar los datos de Material
+    bool baux = false;
+
+    //Carga Reserva
+    ifstream ArchivoReserva;
+    ArchivoReserva.open("Reserva.txt");
+
+    //Carga Material
+    ifstream ArchivoMaterial;
+    ArchivoMaterial.open("Material.txt");
+
+    //Crea el areglo de apuntadores a objetos de tipo material e hijos
+    while (!ArchivoMaterial.eof()){
+        ArchivoMaterial>>id>>titulo>>clave;
         switch (clave){
         case 'L':
             ArchivoMaterial>>iaux>>saux;
-            M[cont] = new Libro(id, titulo, iaux, saux);
+            Material[cont] = new Libro(id, titulo, iaux, saux);
             break;
-
         case 'D':
             ArchivoMaterial>>iaux;
-            M[cont] = new Disco(id, titulo, iaux);
+            Material[cont] = new Disco(id, titulo, iaux);
             break;
-
         case 'S':
             ArchivoMaterial>>saux;
-            M[cont] = new Software(id, titulo, saux);
+            Material[cont] = new Software(id, titulo, saux);
             break;
         }
-        
         cont++;
-        }
-     
-    //Para saber el numero de reservas y no desplegar reservas de mas    
-        int iReservas=0;
-        
-    //Lee el archivo reserva y se mandan los datos al arreglo de reservaciones 
-        for (int c=0; (c<50)&&(ArchivoReserva.eof()==false); c=c+1,iReservas=iReservas+1)
-        {
-            int dd,mm,aa,idMaterial,idCliente;
-     
-            ArchivoReserva>>dd>>mm>>aa>>idMaterial>>idCliente;
-     
-            Fecha FechaReserva(dd,mm,aa);
-     
-            Reservaciones[c].setfechaReservacion(FechaReserva);
-            Reservaciones[c].setidMaterial(idMaterial);
-            Reservaciones[c].setidCliente(idCliente);
-        }
-
-    while (tolower(opcion)!='f')
-    {
+    }
+    //Para saber el numero de reservas y no desplegar reservas de mas
+    int iReservas=0;
+    //Lee el archivo reserva y se mandan los datos al arreglo de reservaciones
+    for (int c=0; (c<50)&&(ArchivoReserva.eof()==false); c=c+1,iReservas=iReservas+1){
+        int dd,mm,aa,idMaterial,idCliente;
+        ArchivoReserva>>dd>>mm>>aa>>idMaterial>>idCliente;
+        Fecha FechaReserva(dd,mm,aa);
+        Reservaciones[c].setfechaReservacion(FechaReserva);
+        Reservaciones[c].setidMaterial(idMaterial);
+        Reservaciones[c].setidCliente(idCliente);
+    }
+    while (tolower(opcion)!='f'){
         menu();
         cin >> opcion;
         cout << endl;
-
-        switch (tolower(opcion))
-        {
+        switch (tolower(opcion)){
         case 'a':
             for(int ix = 0; ix < 20; ix++){
-                M[ix]->muestra();
+                Material[ix]->muestra();
                 cout<<"\n";
             }
-            break;
-
+        break;
         case 'b':
-            for (int c=0;c<iReservas;c=c+1)
-            {
+            for (int c=0; c<iReservas; c++){
                 Fecha FechaReservacion=Reservaciones[c].getfechaReservacion();
-                
-                for(int r=0; r<cont; r=r+1)
-                {
-                    if (Reservaciones[c].getidMaterial()==Material[r].getidMaterial())
-                    {
-                        cout << Material[r].getidMaterial() << " " << Reservaciones[c].getidCliente() << " " << FechaReservacion << " " << FechaReservacion+Material[r].cantidadDiasPrestamo() << endl;
+                for(int r=0; r<=cont; r++){
+                    if (Reservaciones[c].getidMaterial() == Material[r]->getidMaterial()){
+                        cout << Material[r]->getTitulo() << " " << Reservaciones[c].getidCliente() << " " << FechaReservacion << " " << FechaReservacion+Material[r]->cantidadDiasPrestamo() << endl;
                     }
                 }
             }
             break;
 
         case 'c':
+            baux = false;
+            while(!baux){
+                cout<<"Ingresa el id del Material: ";
+                cin >> iaux;
+
+                for (int ix = 0; ix <= cont; ix++){
+                    if (Material[ix]->getidMaterial() == iaux)
+                        baux = true;
+                }
+
+                if (!baux)
+                    cout<<"\n El id no existe, asegurate de ingresar un id existente\n";
+            }
+
+            for (int ix = 0; ix < iReservas; ix++){
+                if (iaux == Reservaciones[ix].getidMaterial()){
+                    Fecha fechaRes = Reservaciones[ix].getfechaReservacion();
+                    for (int iy = 0; iy <= cont; iy++){
+                        if (iaux == Material[iy]->getidMaterial()){
+                            cout<<"\nTitulo: "<<Material[iy]->getTitulo()<<"\nFecha de inicio: "<<fechaRes<<"\nFecha de entrega: "<<fechaRes+Material[iy]->cantidadDiasPrestamo();
+                        }
+                    }
+                }
+            }
+
             break;
 
         case 'd':
@@ -109,13 +128,11 @@ int main()
 
         case 'f':
             ArchivoReserva.close();
+            ArchivoMaterial.close();
             break;
-
         default:
             cout << "Error, opcion incorrecta" << endl << endl;
         }
     }
-
-
-    return 0;
+return 0;
 }
