@@ -34,4 +34,6 @@ void Software::muestra(){
         <<"Sistema Operativo: "<<sistemaOper<<endl;
 }
 
-int cantidadDiasPrestamo();
+int Software::cantidadDiasPrestamo(){
+    return 1;
+}
