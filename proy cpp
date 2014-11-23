@@ -87,8 +87,14 @@ int main()
             for (int c=0;c<iReservas;c=c+1)
             {
                 Fecha FechaReservacion=Reservaciones[c].getfechaReservacion();
-                cout << Reservaciones[c].getidMaterial() << " " << Reservaciones[c].getidCliente() << " " << FechaReservacion;
                 
+                for(int r=0; r<cont; r=r+1)
+                {
+                    if (Reservaciones[c].getidMaterial()==Material[r].getidMaterial())
+                    {
+                        cout << Material[r].getidMaterial() << " " << Reservaciones[c].getidCliente() << " " << FechaReservacion << " " << FechaReservacion+Material[r].cantidadDiasPrestamo() << endl;
+                    }
+                }
             }
             break;
 
