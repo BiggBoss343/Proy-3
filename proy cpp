@@ -77,6 +77,10 @@ int main()
         switch (tolower(opcion))
         {
         case 'a':
+            for(int ix = 0; ix < 20; ix++){
+                M[ix]->muestra();
+                cout<<"\n";
+            }
             break;
 
         case 'b':
