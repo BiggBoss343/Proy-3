@@ -1,0 +1,53 @@
+#ifndef Proyecto 3_Material_h
+#define Proyecto 3_Material_h
+
+class Material{
+    public:
+        Material();
+        Material(int idMaterial, string titulo);
+        int getidMaterial();
+        string getTitulo();
+        void setidMaterial(int id);
+        void setTitulo(string tit);
+        virtual void muestra();
+        virtual int cantidadDiasPrestamo();
+
+    protected:
+        int idMaterial;
+        string titulo;
+};
+
+Material::Material(){
+    idMaterial = 0;
+    titulo = "NA";
+}
+
+Material::Material(int id, string titulo){
+    idMaterial = id;
+    titulo = titulo;
+}
+
+int Material::getidMaterial(){
+    return idMaterial;
+}
+
+string Material::getTitulo(){
+    return titulo;
+}
+
+void Material::setidMaterial(int id){
+    idMaterial = id;
+}
+
+void Material::setTitulo(string tit){
+    titulo = tit;
+}
+
+void Material::muestra(){}
+
+int Material::cantidadDiasPrestamo(){
+    return 0;
+}
+
+
+#endif
