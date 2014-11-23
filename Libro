@@ -1,0 +1,53 @@
+class Libro : public Material{
+    public:
+        Libro();
+        Libro(int idMaterial, string titulo, int numPag, string Autor);
+        int getNumPag();
+        string getAutor();
+        void setNumPag(int num);
+        void setAutor(string autor);
+        void muestra();
+        int cantidadDiasPrestamo();
+
+    private:
+        int numPag;
+        string Autor;
+};
+
+Libro::Libro():Material(){
+    numPag = 0;
+    Autor = "NA";
+}
+
+Libro::Libro(int id, string tit, int num, string aut):Material(id, tit){
+    numPag = num;
+    Autor = aut;
+}
+
+int Libro::getNumPag(){
+    return numPag;
+}
+
+string Libro::getAutor(){
+    return Autor;
+}
+
+void Libro::setNumPag(int num){
+    numPag = num;
+}
+
+void Libro::setAutor(string autor){
+    Autor = autor;
+}
+
+void Libro::muestra(){
+    cout<<"Libro:\n"
+        <<"Id del material: "<<idMaterial<<endl
+        <<"Titulo: "<<titulo<<endl
+        <<"Autor: "<<Autor<<endl
+        <<"Numero de páginas: "<<numPag<<endl;
+}
+
+int Libro::cantidadDiasPrestamo(){
+    return 10;
+}
