@@ -24,7 +24,7 @@ Material::Material(){
 
 Material::Material(int id, string titulo){
     idMaterial = id;
-    titulo = titulo;
+    this->titulo = titulo;
 }
 
 int Material::getidMaterial(){
