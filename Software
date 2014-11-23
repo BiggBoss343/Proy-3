@@ -1,0 +1,37 @@
+class Software: public Material {
+    public:
+        Software();
+        Software(int idMaterial, string titulo, string sistema);
+        void setSistemaOper(string sistema);
+        string getSistemaOper();
+        void muestra();
+        int cantidadDiasPrestamo();
+
+    private:
+        string sistemaOper;
+};
+
+Software::Software():Material(){
+    sistemaOper = "NA";
+}
+
+Software::Software(int idMaterial, string titulo, string sistema):Material(idMaterial, titulo){
+    sistemaOper = sistema;
+}
+
+void Software::setSistemaOper(string sistema){
+    sistemaOper = sistema;
+}
+
+string Software::getSistemaOper(){
+    return sistemaOper;
+}
+
+void Software::muestra(){
+    cout<<"Libro:\n"
+        <<"Id del material: "<<idMaterial<<endl
+        <<"Titulo: "<<titulo<<endl
+        <<"Sistema Operativo: "<<sistemaOper<<endl;
+}
+
+int cantidadDiasPrestamo();
