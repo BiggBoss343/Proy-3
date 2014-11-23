@@ -1,0 +1,39 @@
+class Disco : public Material{
+    public:
+        Disco();
+        Disco(int idMaterial, string titulo, int duracion);
+        void setDuracion(int duracion);
+        int getDuracion();
+        void muestra();
+        int cantidadDiasPrestamo();
+
+    private:
+        int duracion;
+};
+
+Disco::Disco():Material(){
+    duracion = 0;
+}
+
+Disco::Disco(int idMaterial, string titulo, int duracion):Material(idMaterial, titulo){
+    this->duracion = duracion;
+}
+
+void Disco::setDuracion(int duracion){
+    this->duracion = duracion;
+}
+
+int Disco::getDuracion(){
+    return duracion;
+}
+
+void Disco::muestra(){
+    cout<<"Disco:\n"
+        <<"Id del material: "<<idMaterial<<endl
+        <<"Titulo: "<<titulo<<endl
+        <<"Duracion: "<<duracion<<endl;
+}
+
+int Disco::cantidadDiasPrestamo(){
+    return 3;
+}
