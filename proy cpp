@@ -89,7 +89,7 @@ int main()
                 {
                     if (Reservaciones[c].getidMaterial()==Material[r]->getidMaterial())
                     {
-                        cout << Material[r]->getTitulo() << " " << Reservaciones[c].getidCliente() << " " << Reservaciones[c].getfechaReservacion() << " " << Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo()) << endl;
+                        cout<<"\nTitulo: "<<Material[r]->getTitulo() <<"\nId Cliente: " << Reservaciones[c].getidCliente() <<"\nFecha de inicio: "<< Reservaciones[c].getfechaReservacion() <<"\nFecha de entrega: "<< Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo()) << endl;
                     }
                 }
             }
