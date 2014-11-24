@@ -31,6 +31,7 @@ int main()
     string titulo, saux; //necesarios pra ingresar los datos de Material
     char opcion='g', clave; //necesarios pra ingresar los datos de Material
     bool baux = false;
+    Fecha FechaDada(0,0,0); //utilizad para la opcion d
 
     //Carga Reserva
     ifstream ArchivoReserva;
@@ -123,6 +124,19 @@ int main()
             break;
 
         case 'd':
+            while (FechaDada.VerificaFecha()==false)
+            {
+                cout << "Ingresa una fecha: ";
+                cin >> FechaDada;
+                cout << endl;
+            }
+            for (int c=0; c<cont; c=c+1)
+            {
+                if (Reservaciones[c].getfechaReservacion()<=FechaDada)
+                {
+                    
+                }
+            }
             break;
 
         case 'e':
