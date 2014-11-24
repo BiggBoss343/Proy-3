@@ -146,6 +146,54 @@ int main()
             break;
 
         case 'e':
+            idcliente=0;
+            baux = false;
+
+            cout << "Ingresa la id del cliente: ";
+            cin >> idcliente;
+
+            while(!baux){
+                cout<<"Ingresa el id del Material: ";
+                cin >> iaux;
+
+                for (int ix = 0; ix <= cont; ix++){
+                    if (Material[ix]->getidMaterial() == iaux)
+                        baux = true;
+                }
+
+                if (!baux)
+                    cout<<"\n El id no existe, asegurate de ingresar un id existente\n";
+            }
+
+
+                while (FechaDada.VerificaFecha()==false)
+                {
+                    cout << "Ingresa una fecha: ";
+                    cin >> FechaDada;
+                    cout << endl;
+                }
+
+                for (int c=0;c<iReservas+1;c=c+1)
+                {
+                    for(int r=0; r<cont; r=r+1)
+                    {
+                        if (Reservaciones[c].getidMaterial()==Material[r]->getidMaterial())
+                        {
+                            while((FechaDada>Reservaciones[c].getfechaReservacion())&&(FechaDada<Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo())))
+                            {
+                                cout << "Ingresa una fecha: ";
+                                cin >> FechaDada;
+                                cout << endl;
+                            }
+                        }
+                    }
+                }
+
+
+            iReservas=iReservas+1;
+            Reservaciones[iReservas].setidCliente(idcliente);
+            Reservaciones[iReservas].setidMaterial(iaux);
+            Reservaciones[iReservas].setfechaReservacion(FechaDada);
             break;
 
         case 'f':
