@@ -82,11 +82,13 @@ int main()
             }
         break;
         case 'b':
-            for (int c=0; c<iReservas; c++){
-                Fecha FechaReservacion=Reservaciones[c].getfechaReservacion();
-                for(int r=0; r<=cont; r++){
-                    if (Reservaciones[c].getidMaterial() == Material[r]->getidMaterial()){
-                        cout << Material[r]->getTitulo() << " " << Reservaciones[c].getidCliente() << " " << FechaReservacion << " " << FechaReservacion+Material[r]->cantidadDiasPrestamo() << endl;
+             for (int c=0;c<iReservas;c=c+1)
+            {
+                for(int r=0; r<cont; r=r+1)
+                {
+                    if (Reservaciones[c].getidMaterial()==M[r]->getidMaterial())
+                    {
+                        cout << M[r]->getidMaterial() << " " << Reservaciones[c].getidCliente() << " " << Reservaciones[c].getfechaReservacion() << " " << Reservaciones[c].calculaFechaFinReserva(M[r]->cantidadDiasPrestamo()) << endl;
                     }
                 }
             }
