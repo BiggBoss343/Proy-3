@@ -130,11 +130,17 @@ int main()
                 cin >> FechaDada;
                 cout << endl;
             }
-            for (int c=0; c<cont; c=c+1)
+             for (int c=0;c<iReservas;c=c+1)
             {
-                if (Reservaciones[c].getfechaReservacion()<=FechaDada)
+                for(int r=0; r<cont; r=r+1)
                 {
-                    
+                    if (Reservaciones[c].getidMaterial()==Material[r]->getidMaterial())
+                    {
+                        if ((FechaDada>=Reservaciones[c].getfechaReservacion())&&(FechaDada<=Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo())))
+                        {
+                             cout << Material[r]->getTitulo() << " " << Reservaciones[c].getidCliente() << endl;
+                        }
+                    }
                 }
             }
             break;
