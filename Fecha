@@ -163,9 +163,8 @@ bool Fecha::VerificaFecha()
 
 Fecha Fecha::operator+(int dias)
 {
-    Fecha fechamas;
-    fechamas.setFecha(this->dd+dias,this->mm,this->aa);
-    while(VerificaFecha()==false)
+    Fecha fechamas(this->dd+dias,this->mm,this->aa);
+    while(fechamas.VerificaFecha()==false)
     {
         switch (fechamas.mm)
         {
@@ -175,36 +174,36 @@ Fecha Fecha::operator+(int dias)
         case 7:
         case 8:
         case 10:
-        case 12:
             if (fechamas.dd>31)
-                {
-                    fechamas.mm=+1;
-                    fechamas.dd=-31;
-                }
+            {
+                fechamas.setdd(fechamas.dd-31);
+                fechamas.setmm(fechamas.mm+1);
+            }
             break;
         case 4:
         case 6:
         case 9:
         case 11:
             if (fechamas.dd>30)
-                {
-                    fechamas.mm=+1;
-                    fechamas.dd=-30;
-                }
+            {
+                fechamas.setdd(fechamas.dd-30);
+                fechamas.setmm(fechamas.mm+1);
+            }
             break;
         case 2:
             if (fechamas.dd>28)
-                {
-                    fechamas.mm=+1;
-                    fechamas.dd=-28;
-                }
-            break;
-        }
-        if(fechamas.mm>12)
             {
-                fechamas.mm=1;
-                fechamas.aa=+1;
+                fechamas.setdd(fechamas.dd-28);
+                fechamas.setmm(fechamas.mm+1);
             }
+        case 12:
+            if (fechamas.dd>31)
+            {
+                fechamas.setdd(fechamas.dd-31);
+                fechamas.setmm(1);
+                fechamas.setaa(fechamas.aa+1);
+            }
+        }
     }
     return fechamas;
 }
