@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <stdio.h>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ using namespace std;
 
 
 void menu(){
-    cout << "\nMenu" << endl;
+    cout << "Menu" << endl;
     cout << "a. Consultar la lista de Materiales" << endl;
     cout << "b. Consultar la lista de Reservaciones" << endl;
     cout << "c. Consultar las reservaciones de un material dado" << endl;
@@ -31,11 +32,13 @@ int main()
     string titulo, saux; //necesarios pra ingresar los datos de Material
     char opcion='g', clave; //necesarios pra ingresar los datos de Material
     bool baux = false;
-    Fecha FechaDada(0,0,0); //utilizad para la opcion d
+    Fecha FechaDada(0,0,0);
 
     //Carga Reserva
     ifstream ArchivoReserva;
     ArchivoReserva.open("Reserva.txt");
+
+    ofstream ArchivoReservaO;
 
     //Carga Material
     ifstream ArchivoMaterial;
@@ -63,14 +66,22 @@ int main()
     //Para saber el numero de reservas y no desplegar reservas de mas
     int iReservas=0;
     //Lee el archivo reserva y se mandan los datos al arreglo de reservaciones
-    for (int c=0; (c<50)&&(ArchivoReserva.eof()==false); c=c+1,iReservas=iReservas+1){
-        int dd,mm,aa,idMaterial,idCliente;
-        ArchivoReserva>>dd>>mm>>aa>>idMaterial>>idCliente;
+    for (int c=0; (c<50)&&(!ArchivoReserva.eof()); c++,iReservas++){
+        int dd = 1, mm = 1, aa = 1999, idMaterial =-1, idCliente=-1;
+        ArchivoReserva >> dd >> mm >> aa >> idMaterial >> idCliente;
         Fecha FechaReserva(dd,mm,aa);
         Reservaciones[c].setfechaReservacion(FechaReserva);
         Reservaciones[c].setidMaterial(idMaterial);
         Reservaciones[c].setidCliente(idCliente);
     }
+
+    ArchivoReserva.close();
+    ArchivoMaterial.close();
+
+    remove("Reserva.txt");
+
+    ArchivoReservaO.open("Reserva.txt");
+
     while (tolower(opcion)!='f'){
         menu();
         cin >> opcion;
@@ -82,14 +93,12 @@ int main()
                 cout<<"\n";
             }
         break;
+
         case 'b':
-             for (int c=0;c<iReservas+1;c=c+1)
-            {
-                for(int r=0; r<cont; r=r+1)
-                {
-                    if (Reservaciones[c].getidMaterial()==Material[r]->getidMaterial())
-                    {
-                        cout<<"\nTitulo: "<<Material[r]->getTitulo() <<"\nId Cliente: " << Reservaciones[c].getidCliente() <<"\nFecha de inicio: "<< Reservaciones[c].getfechaReservacion() <<"\nFecha de entrega: "<< Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo()) << endl;
+            for (int c=0;c<iReservas+1;c=c+1){
+                for(int r=0; r<=cont; r=r+1){
+                    if ((Reservaciones[c].getidMaterial()==Material[r]->getidMaterial())&&(Reservaciones[c].getidMaterial()!=0)){
+                        cout << Material[r]->getTitulo() << " " << Reservaciones[c].getidCliente() << " " << Reservaciones[c].getfechaReservacion() << " " << Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo()) << endl;
                     }
                 }
             }
@@ -110,7 +119,7 @@ int main()
                     cout<<"\n El id no existe, asegurate de ingresar un id existente\n";
             }
 
-            for (int ix = 0; ix < iReservas; ix++){
+            for (int ix = 0; ix < iReservas+1; ix++){
                 if (iaux == Reservaciones[ix].getidMaterial()){
                     Fecha fechaRes = Reservaciones[ix].getfechaReservacion();
                     for (int iy = 0; iy <= cont; iy++){
@@ -124,21 +133,16 @@ int main()
             break;
 
         case 'd':
-            while (FechaDada.VerificaFecha()==false)
-            {
+            while (FechaDada.VerificaFecha()==false){
                 cout << "Ingresa una fecha: ";
                 cin >> FechaDada;
                 cout << endl;
             }
-             for (int c=0;c<iReservas;c=c+1)
-            {
-                for(int r=0; r<cont; r=r+1)
-                {
-                    if (Reservaciones[c].getidMaterial()==Material[r]->getidMaterial())
-                    {
-                        if ((FechaDada>=Reservaciones[c].getfechaReservacion())&&(FechaDada<=Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo())))
-                        {
-                             cout << Material[r]->getTitulo() << " " << Reservaciones[c].getidCliente() << endl;
+            for (int c=0;c<iReservas+1;c++){
+                for(int r=0; r<=cont; r++){
+                    if (Reservaciones[c].getidMaterial()==Material[r]->getidMaterial()){
+                        if ((FechaDada>=Reservaciones[c].getfechaReservacion())&&(FechaDada<=Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo()))){
+                            cout << Material[r]->getTitulo() << " " << Reservaciones[c].getidCliente() << endl;
                         }
                     }
                 }
@@ -146,62 +150,55 @@ int main()
             break;
 
         case 'e':
-            idcliente=0;
+            id=0;
             baux = false;
-
             cout << "Ingresa la id del cliente: ";
-            cin >> idcliente;
-
+            cin >> id;
             while(!baux){
                 cout<<"Ingresa el id del Material: ";
                 cin >> iaux;
-
-                for (int ix = 0; ix <= cont; ix++){
-                    if (Material[ix]->getidMaterial() == iaux)
-                        baux = true;
-                }
-
-                if (!baux)
-                    cout<<"\n El id no existe, asegurate de ingresar un id existente\n";
+                    for (int ix = 0; ix <= cont; ix++){
+                        if (Material[ix]->getidMaterial() == iaux)
+                            baux = true;
+                        }
+                        if (!baux)
+                            cout<<"\n El id no existe, asegurate de ingresar un id existente\n";
             }
-
-
-                while (FechaDada.VerificaFecha()==false)
-                {
-                    cout << "Ingresa una fecha: ";
-                    cin >> FechaDada;
-                    cout << endl;
-                }
-
-                for (int c=0;c<iReservas+1;c=c+1)
-                {
-                    for(int r=0; r<cont; r=r+1)
-                    {
-                        if (Reservaciones[c].getidMaterial()==Material[r]->getidMaterial())
-                        {
-                            while((FechaDada>Reservaciones[c].getfechaReservacion())&&(FechaDada<Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo())))
-                            {
-                                cout << "Ingresa una fecha: ";
-                                cin >> FechaDada;
-                                cout << endl;
-                            }
+            while (FechaDada.VerificaFecha()==false){
+                cout << "Ingresa una fecha: ";
+                cin >> FechaDada;
+                cout << endl;
+            }
+            for (int c=0;c<iReservas+1;c=c+1){
+                for(int r=0; r<=cont; r=r+1){
+                    if (Reservaciones[c].getidMaterial()==Material[r]->getidMaterial()){
+                        while((FechaDada>Reservaciones[c].getfechaReservacion())&&(FechaDada<Reservaciones[c].calculaFechaFinReserva(Material[r]->cantidadDiasPrestamo()))){
+                            cout << "Ingresa una fecha: ";
+                            cin >> FechaDada;
+                            cout << endl;
                         }
                     }
                 }
-
-
+            }
             iReservas=iReservas+1;
-            Reservaciones[iReservas].setidCliente(idcliente);
+            Reservaciones[iReservas].setidCliente(id);
             Reservaciones[iReservas].setidMaterial(iaux);
             Reservaciones[iReservas].setfechaReservacion(FechaDada);
+
             break;
 
         case 'f':
-            ArchivoReserva.close();
-            ArchivoMaterial.close();
+            for (int ix = 0; ix < iReservas+1; ix++){
+                FechaDada = Reservaciones[ix].getfechaReservacion();
+                if(Reservaciones[ix].getidMaterial()!=-1)
+                    ArchivoReservaO<<FechaDada.getdd()<<" "<<FechaDada.getmm()<<" "<<FechaDada.getaa()<<" "<<Reservaciones[ix].getidMaterial()<<" "<<Reservaciones[ix].getidCliente()<<endl;
+            }
+
+            ArchivoReservaO.close();
             break;
+
         default:
-            cout << "Error, opcion incorrecta" << endl << endl;
+            cout << "\nError, opcion incorrecta" << endl << endl;
         }
     }
 return 0;
