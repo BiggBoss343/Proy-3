@@ -83,7 +83,7 @@ int main()
             }
         break;
         case 'b':
-             for (int c=0;c<iReservas;c=c+1)
+             for (int c=0;c<iReservas+1;c=c+1)
             {
                 for(int r=0; r<cont; r=r+1)
                 {
